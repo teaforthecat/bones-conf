@@ -3,6 +3,10 @@
 A Clojure library designed to read configuration files and provide a
 component to inject into a component system-map.
 
+
+https://api.travis-ci.org/teaforthecat/bones.conf.svg
+
+
 ## Usage
 
 Recommended implementation
