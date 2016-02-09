@@ -2,9 +2,6 @@
   (:require [clojure.string :as s]
             [com.stuartsierra.component :as component]
             [clojure.edn :as edn]
-            [clj-yaml.core :as yaml]
-            [clojurewerkz.propertied.properties :as p]
-            [clojure.java.io :as io]
             ))
 
 (defn get-extension [file-path]
@@ -14,19 +11,6 @@
 
 (defmethod parse "edn" [file-path]
   (edn/read-string (slurp file-path)))
-
-(defmethod parse "yml" [file-path]
-  (yaml/parse-string (slurp file-path)))
-
-;; both are valid I guess
-(defmethod parse "yaml" [file-path]
-  (yaml/parse-string (slurp file-path)))
-
-(defmethod parse "properties" [file-path]
-  (-> file-path
-      (io/file)
-      (p/load-from)
-      (p/properties->map true)))
 
 (defn quiet-slurp [file-path]
   (try

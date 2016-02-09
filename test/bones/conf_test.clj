@@ -1,7 +1,23 @@
 (ns bones.conf-test
   (:require [clojure.test :refer :all]
             [bones.conf :as conf]
-            [matcha :as m]))
+            [matcha :as m]
+            [clojure.java.io :as io]
+            [clj-yaml.core :as yaml]
+            [clojurewerkz.propertied.properties :as p]))
+
+
+;; test extension
+(defmethod bones.conf/parse "yml" [file-path]
+  (yaml/parse-string (slurp file-path)))
+
+;; test extension
+(defmethod bones.conf/parse "properties" [file-path]
+  (-> file-path
+      (io/file)
+      (p/load-from)
+      (p/properties->map true)))
+
 
 (deftest loading-files
   (testing "slurps a file"
