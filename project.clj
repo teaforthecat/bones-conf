@@ -1,4 +1,4 @@
-(defproject bones.conf "0.1.2"
+(defproject bones.conf "0.1.3"
   :description "application configuration reloaded"
   :url "http://github.com/teaforthecat/bones.conf"
   :license {:name "Eclipse Public License"
@@ -8,7 +8,7 @@
   :profiles {:test
              {:dependencies [[matcha "0.1.0"]
                              [clj-yaml "0.4.0"]
-                             [clojurewerkz/propertied "1.2.0"]]}}
-
-
+                             [clojurewerkz/propertied "1.2.0"]]}
+             ;; add :test to default so dependencies aren't propagated
+             :default [:base :system :user :provided :dev :test]}
   )
