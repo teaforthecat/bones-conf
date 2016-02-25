@@ -75,4 +75,16 @@
         (m/is (m/has-entry :sticky-keys [:abc]) reloaded)
         (m/is (m/has-entry :mappy-keys {:bonjour :hello}) reloaded))
       (testing "holds the values read from files that are in :sticky-keys"
-        (m/is (m/has-entry :abc "xyz") reloaded)))))
+        (m/is (m/has-entry :abc "xyz") reloaded))))
+  (testing "does not require mappy-keys"
+    (let [result (conf/map->Conf {:conf-files ["test/fixtures/a.edn"]})
+          started (conf/start result)
+          stopped (conf/stop started)]
+      (m/is m/nil? (:mappy-keys started))
+      (m/is m/nil? (:mappy-keys stopped))))
+  (testing "does not require sticky-keys"
+    (let [result (conf/map->Conf {:conf-files ["test/fixtures/a.edn"]})
+          started (conf/start result)
+          stopped (conf/stop started)]
+      (m/is m/nil? (:sticky-keys started))
+      (m/is m/nil? (:sticky-keys stopped)))))

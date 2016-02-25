@@ -35,10 +35,16 @@
 
 ;; it's unfortunate that reduce will give up and go home if the coll has only one item
 (defn copy-values [conf key-set]
-  (if (< 1 (count key-set))
-    (reduce copy-val conf key-set)
-    (let [[k v] (first key-set)]
-      (copy-val conf [k v]))))
+  (let [n (count key-set)]
+    (cond
+      (> 1 n)
+      (reduce copy-val conf key-set)
+      (= 1)
+      (let [[k v] (first key-set)]
+        (copy-val conf [k v]))
+      (= 0 n)
+      conf ;;do nothing
+      )))
 
 ;; must return a Conf record, not just any map.
 (defrecord Conf [conf-files sticky-keys mappy-keys]
