@@ -39,7 +39,7 @@ The files will get read and parsed according to the file extension. Only .edn is
 supported out of the box but see below for others.
 
 `:sticky-keys` *optional* Sometimes you want to keep the configuration values
-around when you set them on the Conf record it code and reload the component.
+around when you set them in code and reload the component.
 The sticky-keys will not get lost unless they also exist in a file.
 
 `:mappy-keys` *silly* Just in case you want to use the same value for multiple
