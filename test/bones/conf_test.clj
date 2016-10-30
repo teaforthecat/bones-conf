@@ -88,3 +88,12 @@
           stopped (conf/stop started)]
       (m/is m/nil? (:sticky-keys started))
       (m/is m/nil? (:sticky-keys stopped)))))
+
+(deftest substitute-environment
+  (let [result (conf/parse-vars "$WAT-$AB_C")]
+    (is (= (list "WAT" "AB_C") result)))
+  (testing "environment variables are substituted in the file path"
+    (let [file-paths ["abc.edn" "config/$BONES_ENV.edn"]
+          result (map (conf/substitute-env {"BONES_ENV" "xyz"}) file-paths)]
+      (is (= "abc.edn" (first result)))
+      (is (= "config/xyz.edn" (second result))))))

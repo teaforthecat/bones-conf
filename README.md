@@ -36,7 +36,9 @@ Any key can be a configuration variable but these are treated special.
 
 `:conf-files` *required*  A list of file paths that can be absolute or relative.
 The files will get read and parsed according to the file extension. Only .edn is
-supported out of the box but see below for others.
+supported out of the box but see below for others. Environment variables will be
+substituted in these strings, e.g.: 
+if `APP_ENV=development`,  `"conf/$APP_ENV.edn"` -> `"conf/development.edn"`
 
 `:sticky-keys` *optional* Sometimes you want to keep the configuration values
 around when you set them in code and reload the component.

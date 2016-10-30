@@ -1,8 +1,7 @@
 (ns bones.conf
   (:require [clojure.string :as s]
             [com.stuartsierra.component :as component]
-            [clojure.edn :as edn]
-            ))
+            [clojure.edn :as edn]))
 
 (defn get-extension [file-path]
   (last (s/split file-path #"\.")))
@@ -21,8 +20,25 @@
     (catch java.io.FileNotFoundException e
       (println (str "WARNING: conf file not found: " file-path)))))
 
+(defn parse-vars [file-path]
+  (map #(s/replace % "$" "")
+       (re-seq #"\$[A-Z_]*" file-path)))
+
+(defn substitute-env [env]
+  (fn [file-path]
+    (let [found (parse-vars file-path)]
+      (if-not (empty? found)
+        ;; TODO: throw if not found in environment?
+        ;; $VAR -> ?VAR if not in environment
+        (let [getter #(get env % (str "?" %))
+              ;; put the $VAR back for the replacement search
+              found-pairs (map #(list (str "$" %) (getter %)) found)]
+          (reduce (partial apply s/replace ) file-path found-pairs))
+        file-path))))
+
 (defn read-conf-data [conf-files]
   (->> conf-files
+       (map (substitute-env (System/getenv)))
        (map quiet-slurp)
        (reduce merge {})))
 
