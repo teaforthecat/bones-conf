@@ -1,2 +1,4 @@
 {:hello "world"
- :abc "xyz"}
+ :abc "xyz"
+ :sub-conf {:something "important"
+            :data "left-over"}}

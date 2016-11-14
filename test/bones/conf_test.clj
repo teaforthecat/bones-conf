@@ -48,13 +48,17 @@
 
 (deftest merging-values
   (testing "merges files into a single hash"
+    ;; the order is important here
    (let [result (conf/read-conf-data ["test/fixtures/a.edn"
                                       "test/fixtures/a.yml"
                                       "test/fixtures/a.properties"])]
      (testing "keeps values from first file"
        (m/is (m/has-entry :abc "xyz") result))
      (testing "overwrites values, last file wins"
-         (m/is (m/has-entry :hello "mars") result)))))
+       (m/is (m/has-entry :hello "mars") result))
+     (testing "merges maps one level deep"
+       (m/is (m/has-entry :sub-conf {:something "more-important"
+                                     :data "left-over"}) result)))))
 
 (deftest has-component
   (testing "is configurable itself"

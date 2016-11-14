@@ -36,11 +36,17 @@
           (reduce (partial apply s/replace ) file-path found-pairs))
         file-path))))
 
+(defn merge-maps [a b]
+  (if (and (map? a) (map? b))
+    (merge a b)
+    ; else, overwrites
+    b))
+
 (defn read-conf-data [conf-files]
   (->> conf-files
        (map (substitute-env (System/getenv)))
        (map quiet-slurp)
-       (reduce merge {})))
+       (reduce (partial merge-with merge-maps) {})))
 
 (defn copy-val [acc [k v]]
   (let [important-value (get acc v)]
@@ -67,7 +73,7 @@
   component/Lifecycle
   (start [cmp]
     (let [conf-data (read-conf-data conf-files)]
-      (map->Conf (copy-values (merge cmp conf-data) mappy-keys))))
+      (map->Conf (copy-values (merge-with merge cmp conf-data) mappy-keys))))
   (stop [cmp]
     ;; keep the specified sticky keys and the special keys themselves
     (map->Conf (select-keys cmp (conj sticky-keys :conf-files :sticky-keys :mappy-keys)))
