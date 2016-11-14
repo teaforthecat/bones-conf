@@ -73,7 +73,7 @@
   component/Lifecycle
   (start [cmp]
     (let [conf-data (read-conf-data conf-files)]
-      (map->Conf (copy-values (merge-with merge cmp conf-data) mappy-keys))))
+      (map->Conf (copy-values (merge-with merge-maps cmp conf-data) mappy-keys))))
   (stop [cmp]
     ;; keep the specified sticky keys and the special keys themselves
     (map->Conf (select-keys cmp (conj sticky-keys :conf-files :sticky-keys :mappy-keys)))

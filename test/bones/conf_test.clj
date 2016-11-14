@@ -65,21 +65,25 @@
     (let [result (conf/map->Conf {:conf-files ["test/fixtures/a.edn"]
                                   :sticky-keys [:abc]
                                   :mappy-keys {:bonjour :hello}
-                                  :something :else})
+                                  :hello "county"
+                                  :sub-conf {:something "less-important"}})
           started (conf/start result)
           stopped (conf/stop started)
           reloaded (conf/reload result)
           ]
       (testing "includes ad-hoc values when started"
-        (m/is (m/has-key :something) started))
+        (m/is (m/has-key :sub-conf) started))
       (testing "drops ad-hoc values when reloaded"
-        (m/is (m/not (m/has-key :something)) stopped))
+        (m/is (m/not (m/has-key :sub-conf)) stopped))
       (testing "holds value of :conf-files :sticky-keys and :mappy-keys"
         (m/is (m/has-entry :conf-files ["test/fixtures/a.edn"]) reloaded)
         (m/is (m/has-entry :sticky-keys [:abc]) reloaded)
         (m/is (m/has-entry :mappy-keys {:bonjour :hello}) reloaded))
       (testing "holds the values read from files that are in :sticky-keys"
-        (m/is (m/has-entry :abc "xyz") reloaded))))
+        (m/is (m/has-entry :abc "xyz") reloaded))
+      (testing "merges maps from files into maps from code"
+        (m/is (m/has-entry :sub-conf {:something "important"
+                                      :data "left-over"}) reloaded))))
   (testing "does not require mappy-keys"
     (let [result (conf/map->Conf {:conf-files ["test/fixtures/a.edn"]})
           started (conf/start result)
