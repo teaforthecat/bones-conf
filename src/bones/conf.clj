@@ -89,3 +89,8 @@
   (-> conf
       stop
       start))
+
+;; big data
+(defmethod clojure.core/print-method Conf
+  [system ^java.io.Writer writer]
+  (.write writer "#<bones.conf/Conf>"))
