@@ -1,4 +1,4 @@
-(defproject bones/conf "0.2.2"
+(defproject bones/conf "0.2.3"
   :description "application configuration reloaded"
   :url "http://github.com/teaforthecat/bones-conf"
   :license {:name "Eclipse Public License"
