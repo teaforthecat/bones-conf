@@ -105,3 +105,7 @@
           result (map (conf/substitute-env {"BONES_ENV" "xyz"}) file-paths)]
       (is (= "abc.edn" (first result)))
       (is (= "config/xyz.edn" (second result))))))
+
+(deftest uses-aero
+  (let [result (conf/start (conf/map->Conf {:conf-files ["test/fixtures/aero.edn"]}))]
+    (is (= {:abc 123} (:aero result)))))

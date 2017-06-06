@@ -1,6 +1,7 @@
 (ns bones.conf
   (:require [clojure.string :as s]
             [com.stuartsierra.component :as component]
+            [aero.core :refer [read-config]]
             [clojure.edn :as edn]))
 
 (defn get-extension [file-path]
@@ -9,7 +10,7 @@
 (defmulti parse #'get-extension)
 
 (defmethod parse "edn" [file-path]
-  (edn/read-string (slurp file-path)))
+  (read-config file-path))
 
 (defn quiet-slurp [file-path]
   (try
